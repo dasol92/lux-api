@@ -13,11 +13,11 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-public class BookReference {
+public class Book {
     @Id @GeneratedValue
-    @Column(name = "book_reference_id")
+    @Column(name = "book_id")
     private Long id;
-    private String book;
+    private String name;
     private Integer chapter;
     private Integer verse;
 }

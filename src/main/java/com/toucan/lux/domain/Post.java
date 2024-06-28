@@ -37,5 +37,5 @@ public class Post {
     private List<Member> likedMembers = new ArrayList<>();
 
     @ManyToMany
-    private List<BookReference> references = new ArrayList<>();
+    private List<Book> references = new ArrayList<>();
 }
