@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Builder
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue
-    @Column(name = "user_id")
+    @Column(name = "member_id")
     private Long id;
 
     private String password;
@@ -25,4 +27,10 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "author")
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
 }

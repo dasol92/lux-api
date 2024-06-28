@@ -18,6 +18,10 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member author;
+
     @Column(nullable = false)
     private String title;
 

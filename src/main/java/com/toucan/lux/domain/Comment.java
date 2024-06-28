@@ -19,7 +19,13 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member author;
+
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+
+    private Long likeCount;
 }
 
