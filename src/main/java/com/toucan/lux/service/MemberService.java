@@ -5,6 +5,8 @@ import com.toucan.lux.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -19,6 +21,10 @@ public class MemberService {
         return memberRepository.findById(id).orElse(null);
     }
 
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
+    }
+
     public void deleteMemberById(Long id) {
         memberRepository.deleteById(id);
     }
@@ -30,8 +36,6 @@ public class MemberService {
     public Member getMemberByEmail(String email) {
         return memberRepository.findByEmail(email);
     }
-
-
 
 
 }
