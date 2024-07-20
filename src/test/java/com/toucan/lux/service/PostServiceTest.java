@@ -3,6 +3,8 @@ package com.toucan.lux.service;
 import com.toucan.lux.domain.Comment;
 import com.toucan.lux.domain.Member;
 import com.toucan.lux.domain.Post;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,14 @@ class PostServiceTest {
     @Autowired
     private MemberService memberService;
 
-    @DisplayName("게시물을 생성한다")
-    @Test
-    @Transactional
-    void createPost() {
-        // given
-        Member member1 = Member.builder()
+    @Autowired
+    private CommentService commentService;
+
+    private Post post;
+    private Member member1;
+
+    void setUp() {
+        member1 = Member.builder()
                 .name("김서영")
                 .build();
 
@@ -39,7 +43,7 @@ class PostServiceTest {
         memberService.addMember(member1);
         memberService.addMember(member2);
 
-        Post post = Post.builder()
+        post = Post.builder()
                 .author(member1)
                 .title("질문이요")
                 .content("이거 어떻게 해요?")
@@ -52,11 +56,22 @@ class PostServiceTest {
                 .post(post)
                 .build();
 
+        commentService.saveComment(comment1);
+
         Comment comment2 = Comment.builder()
                 .author(member2)
                 .content("좋아요")
                 .post(post)
                 .build();
+
+        commentService.saveComment(comment2);
+    }
+
+    @DisplayName("게시물을 생성한다")
+    @Test
+    @Transactional
+    void createPost() {
+        setUp();
 
         // when
         Post savedPost = postService.createPost(post);
@@ -82,7 +97,18 @@ class PostServiceTest {
     }
 
     @Test
+    @Transactional
     void deletePostById() {
+        setUp();
+
+        // given
+        Post savedPost = postService.createPost(post);
+
+        // when
+        postService.deletePostById(savedPost.getId());
+
+        // then
+        assertThat(postService.getPostById(savedPost.getId())).isNull();
     }
 
     @Test
