@@ -26,7 +26,6 @@ class PostServiceTest {
     @DisplayName("게시물을 생성한다")
     @Test
     @Transactional
-    @Rollback(value = false)
     void createPost() {
         // given
         Member member1 = Member.builder()
