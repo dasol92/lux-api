@@ -28,14 +28,21 @@ public class Post {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
     private Long likeCount;
 
     @ManyToMany
+    @Builder.Default
     private List<Member> likedMembers = new ArrayList<>();
 
     @ManyToMany
+    @Builder.Default
     private List<Book> references = new ArrayList<>();
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 }

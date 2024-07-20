@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,8 +30,18 @@ public class Member extends BaseEntity {
     private Role role;
 
     @OneToMany(mappedBy = "author")
-    private List<Post> posts;
+    @Builder.Default
+    private final List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "author")
-    private List<Comment> comments;
+    @Builder.Default
+    private final List<Comment> comments = new ArrayList<>();
+
+    public void addPost(Post post) {
+        posts.add(post);
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 }

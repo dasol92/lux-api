@@ -27,5 +27,24 @@ public class Comment {
     private String content;
 
     private Long likeCount;
+
+    public static class CommentBuilder {
+        public CommentBuilder author(Member author) {
+            this.author = author;
+            if (author != null) {
+                author.addComment(this.build());
+            }
+            return this;
+        }
+
+        public CommentBuilder post(Post post) {
+            this.post = post;
+            if (post != null) {
+                post.addComment(this.build());
+            }
+            return this;
+        }
+    }
+
 }
 
