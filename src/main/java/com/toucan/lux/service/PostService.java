@@ -1,5 +1,6 @@
 package com.toucan.lux.service;
 
+import com.toucan.lux.domain.Member;
 import com.toucan.lux.domain.Post;
 import com.toucan.lux.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,8 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public List<Post> getPostsByAuthorId(Long authorId) {
-        return postRepository.findByAuthorId(authorId);
+    public List<Post> getPostsByAuthor(Member author) {
+        return postRepository.findByAuthor(author);
     }
 
 
