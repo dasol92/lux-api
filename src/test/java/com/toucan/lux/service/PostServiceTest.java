@@ -3,13 +3,12 @@ package com.toucan.lux.service;
 import com.toucan.lux.domain.Comment;
 import com.toucan.lux.domain.Member;
 import com.toucan.lux.domain.Post;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,6 +19,9 @@ import static org.assertj.core.api.Assertions.*;
 class PostServiceTest {
 
     @Autowired
+    EntityManager em;
+
+    @Autowired
     private PostService postService;
 
     @Autowired
@@ -28,94 +30,101 @@ class PostServiceTest {
     @Autowired
     private CommentService commentService;
 
-    private Post post;
-    private Member member1;
+    private final String testMember1Email = "yskim@naver.com";
+    private final String testMember2Email = "djkim@naver.com";
 
-    void setUp() {
-        member1 = Member.builder()
-                .name("김서영")
+    @BeforeAll
+    static void setUpAll(@Autowired MemberService memberService) {
+        Member member1 = Member.builder()
+                .name("김영삼")
+                .email("yskim@naver.com")
                 .build();
 
         Member member2 = Member.builder()
-                .name("김다솔")
+                .name("김대중")
+                .email("djkim@naver.com")
                 .build();
 
         memberService.addMember(member1);
         memberService.addMember(member2);
-
-        post = Post.builder()
-                .author(member1)
-                .title("질문이요")
-                .content("이거 어떻게 해요?")
-                .likeCount(10L)
-                .build();
-
-        Comment comment1 = Comment.builder()
-                .author(member1)
-                .content("댓글이에요")
-                .post(post)
-                .build();
-
-        commentService.saveComment(comment1);
-
-        Comment comment2 = Comment.builder()
-                .author(member2)
-                .content("좋아요")
-                .post(post)
-                .build();
-
-        commentService.saveComment(comment2);
     }
 
     @DisplayName("게시물을 생성한다")
     @Test
     @Transactional
     void createPost() {
-        setUp();
+        // given
+        Member author = memberService.getMemberByEmail(testMember1Email);
+        Post post = Post.builder()
+                .author(author)
+                .title("질문이요")
+                .content("이거 어떻게 해요?")
+                .likeCount(10L)
+                .build();
 
         // when
         Post savedPost = postService.createPost(post);
 
         // then
-        List<Post> postsByAuthor = postService.getPostsByAuthor(member1);
+        List<Post> postsByAuthor = postService.getPostsByAuthor(author);
         assertThat(postsByAuthor).contains(savedPost);
     }
 
-    @DisplayName("모든 게시물을 조회한다")
+    @DisplayName("댓글이 달린 게시물을 생성한다")
     @Test
-    void getAllPosts() {
+    @Transactional
+    void test() {
         // given
+        Member author = memberService.getMemberByEmail(testMember1Email);
+        Member commenter = memberService.getMemberByEmail(testMember2Email);
+        Post post = Post.builder()
+                .author(author)
+                .title("질문이요")
+                .content("이거 어떻게 해요?")
+                .likeCount(10L)
+                .build();
+
+        Comment comment = Comment.builder()
+                .post(post)
+                .author(commenter)
+                .content("이렇게 하면 됩니다.")
+                .build();
 
         // when
+        commentService.createComment(comment);
+        postService.createPost(post);
 
         // then
+        List<Comment> commentsByPost = commentService.getCommentByPost(post);
+        assertThat(commentsByPost)
+                .hasSize(1)
+                .contains(comment);
+
     }
 
-
-    @Test
-    void getPostById() {
-    }
-
+    @DisplayName("게시물 삭제")
     @Test
     @Transactional
     void deletePostById() {
-        setUp();
-
         // given
-        Post savedPost = postService.createPost(post);
+        Member author = memberService.getMemberByEmail(testMember1Email);
+        Post post = Post.builder()
+                .author(author)
+                .title("질문이요")
+                .content("이거 어떻게 해요?")
+                .likeCount(10L)
+                .build();
 
         // when
+        Post savedPost = postService.createPost(post);
+        em.flush();
+        em.clear();
+
         postService.deletePostById(savedPost.getId());
+        em.flush();
+        em.clear();
 
         // then
         assertThat(postService.getPostById(savedPost.getId())).isNull();
-    }
-
-    @Test
-    void updatePost() {
-    }
-
-    @Test
-    void getPostsByAuthorId() {
     }
 }

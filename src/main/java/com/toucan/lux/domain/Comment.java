@@ -1,15 +1,13 @@
 package com.toucan.lux.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@Getter
 public class Comment {
     @Id @GeneratedValue
     @Column(name = "comment_id")
