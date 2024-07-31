@@ -20,4 +20,5 @@ public class Book {
     private String name;
     private Integer chapter;
     private Integer verse;
+    private String content;
 }
