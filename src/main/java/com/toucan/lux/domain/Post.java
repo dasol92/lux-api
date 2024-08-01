@@ -54,7 +54,7 @@ public class Post extends BaseEntity {
         dto.setCreatedAt(this.getCreatedAt());
         dto.setUpdatedAt(this.getUpdatedAt());
         dto.setLikeCount(this.likeCount);
-        dto.setReferences(this.references.stream().map(Book::getName).toList());
+        dto.setReferences(this.references.stream().map(b -> b.getName() + " " + b.getChapter() + ":" + b.getVerse()).toList());
         dto.setComments(this.comments.stream().map(Comment::toDTO).toList());
         return dto;
     }
