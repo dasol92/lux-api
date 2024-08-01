@@ -17,6 +17,10 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    public List<Member> addMembers(List<Member> members) {
+        return memberRepository.saveAll(members);
+    }
+
     public Member getMemberById(Long id) {
         return memberRepository.findById(id).orElse(null);
     }
