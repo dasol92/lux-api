@@ -1,5 +1,6 @@
 package com.toucan.lux.domain;
 
+import com.toucan.lux.dto.CommentDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,7 +9,7 @@ import lombok.*;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-public class Comment {
+public class Comment extends BaseEntity{
     @Id @GeneratedValue
     @Column(name = "comment_id")
     private Long id;
@@ -42,6 +43,16 @@ public class Comment {
             }
             return this;
         }
+    }
+
+    public CommentDTO toDTO() {
+        CommentDTO dto = new CommentDTO();
+        dto.setId(this.id);
+        dto.setContent(this.content);
+        dto.setAuthorName(this.author != null ? this.author.getName() : null);
+        dto.setCreatedAt(this.getCreatedAt());
+        dto.setLikeCount(this.likeCount);
+        return dto;
     }
 
 }

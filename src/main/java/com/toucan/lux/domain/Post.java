@@ -1,5 +1,6 @@
 package com.toucan.lux.domain;
 
+import com.toucan.lux.dto.PostDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-public class Post {
+public class Post extends BaseEntity {
     @Id @GeneratedValue
     @Column(name = "post_id")
     private Long id;
@@ -42,5 +43,19 @@ public class Post {
 
     public void addComment(Comment comment) {
         comments.add(comment);
+    }
+
+    public PostDTO toDTO() {
+        PostDTO dto = new PostDTO();
+        dto.setId(this.id);
+        dto.setTitle(this.title);
+        dto.setContent(this.content);
+        dto.setAuthorName(this.author != null ? this.author.getName() : null);
+        dto.setCreatedAt(this.getCreatedAt());
+        dto.setUpdatedAt(this.getUpdatedAt());
+        dto.setLikeCount(this.likeCount);
+        dto.setReferences(this.references.stream().map(Book::getName).toList());
+        dto.setComments(this.comments.stream().map(Comment::toDTO).toList());
+        return dto;
     }
 }

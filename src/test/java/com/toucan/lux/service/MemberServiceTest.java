@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -19,14 +20,17 @@ class MemberServiceTest {
     @DisplayName("멤버 등록 성공시")
     @Test
     @Transactional
+    @Rollback(value = false)
     void test() {
         // given
         Member member1 = Member.builder()
-                .name("김서영")
+                .name("김영삼")
+                .email("yskim@naver.com")
                 .build();
 
         Member member2 = Member.builder()
-                .name("김다솔")
+                .name("김대중")
+                .email("djkim@naver.com")
                 .build();
 
         // when
