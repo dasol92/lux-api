@@ -1,9 +1,11 @@
 package com.toucan.lux.config;
 
 import com.toucan.lux.domain.Book;
+import com.toucan.lux.domain.Comment;
 import com.toucan.lux.domain.Member;
 import com.toucan.lux.domain.Post;
 import com.toucan.lux.service.BookService;
+import com.toucan.lux.service.CommentService;
 import com.toucan.lux.service.MemberService;
 import com.toucan.lux.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class DataLoader implements ApplicationRunner {
     private final MemberService memberService;
     private final PostService postService;
     private final BookService  bookService;
+    private final CommentService commentService;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -71,8 +74,22 @@ public class DataLoader implements ApplicationRunner {
                     .likeCount(10L)
                     .references(books)
                     .build();
+            Post savedPost = postService.createPost(post);
 
-            postService.createPost(post);
+            Comment comment1= Comment.builder()
+                    .content("이런 뜻 아닐까요? " + (i+1))
+                    .author(member2)
+                    .post(savedPost)
+                    .build();
+
+            Comment comment2 = Comment.builder()
+                    .content("네 감사합니다: " + (i+1))
+                    .author(member1)
+                    .post(savedPost)
+                    .build();
+
+            commentService.createComment(comment1);
+            commentService.createComment(comment2);
         }
     }
 
