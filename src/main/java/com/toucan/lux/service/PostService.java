@@ -2,8 +2,11 @@ package com.toucan.lux.service;
 
 import com.toucan.lux.domain.Member;
 import com.toucan.lux.domain.Post;
+import com.toucan.lux.dto.PostDTO;
 import com.toucan.lux.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +16,8 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc();
+    public Page<PostDTO> getAllPosts(Pageable pageable) {
+        return postRepository.findAllByOrderByCreatedAtDesc(pageable).map(Post::toDTO);
     }
 
     public Post createPost(Post post) {
