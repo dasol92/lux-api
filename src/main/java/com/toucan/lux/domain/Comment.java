@@ -1,6 +1,6 @@
 package com.toucan.lux.domain;
 
-import com.toucan.lux.dto.CommentDTO;
+import com.toucan.lux.dto.comment.CommentDTO;
 import jakarta.persistence.*;
 import lombok.*;
 

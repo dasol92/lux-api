@@ -1,5 +1,6 @@
 package com.toucan.lux.dto;
 
+import com.toucan.lux.dto.comment.CommentDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;
