@@ -77,13 +77,13 @@ public class DataLoader implements ApplicationRunner {
             Post savedPost = postService.createPost(post);
 
             Comment comment1= Comment.builder()
-                    .content("이런 뜻 아닐까요? " + (i+1))
+                    .content("<p>이런 뜻 아닐까요? " + (i+1) + "</p>")
                     .author(member2)
                     .post(savedPost)
                     .build();
 
             Comment comment2 = Comment.builder()
-                    .content("네 감사합니다: " + (i+1))
+                    .content("<p>네 감사합니다: " + (i+1) + "</p>")
                     .author(member1)
                     .post(savedPost)
                     .build();
