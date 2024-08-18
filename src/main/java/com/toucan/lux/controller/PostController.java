@@ -30,14 +30,14 @@ public class PostController {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<PostDTO> posts = postService.getAllPosts(pageRequest);
 
-        Map<String, Object> responese = new HashMap<>();
-        responese.put("content", posts.getContent());
-        responese.put("totalPages", posts.getTotalPages());
-        responese.put("totalElements", posts.getTotalElements());
-        responese.put("size", posts.getSize());
-        responese.put("number", posts.getNumber());
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", posts.getContent());
+        response.put("totalPages", posts.getTotalPages());
+        response.put("totalElements", posts.getTotalElements());
+        response.put("size", posts.getSize());
+        response.put("number", posts.getNumber());
 
-        return ResponseEntity.ok(responese);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
