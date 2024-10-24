@@ -37,3 +37,4 @@ out/
 .vscode/
 
 src/main/resources/jwt.yml
+src/main/resources/application.yml
