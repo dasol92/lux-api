@@ -4,18 +4,21 @@ import com.toucan.lux.domain.Comment;
 import com.toucan.lux.domain.Member;
 import com.toucan.lux.domain.Post;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@ActiveProfiles("test")
+@Transactional
 class PostServiceTest {
 
     @Autowired
@@ -33,8 +36,8 @@ class PostServiceTest {
     private final String testMember1Email = "yskim@naver.com";
     private final String testMember2Email = "djkim@naver.com";
 
-    @BeforeAll
-    static void setUpAll(@Autowired MemberService memberService) {
+    @BeforeEach
+    void setUpAll(@Autowired MemberService memberService) {
         Member member1 = Member.builder()
                 .name("김영삼")
                 .email("yskim@naver.com")
@@ -51,7 +54,6 @@ class PostServiceTest {
 
     @DisplayName("게시물을 생성한다")
     @Test
-    @Transactional
     void createPost() {
         // given
         Member author = memberService.getMemberByEmail(testMember1Email);
@@ -72,7 +74,6 @@ class PostServiceTest {
 
     @DisplayName("댓글이 달린 게시물을 생성한다")
     @Test
-    @Transactional
     void test() {
         // given
         Member author = memberService.getMemberByEmail(testMember1Email);
@@ -104,7 +105,6 @@ class PostServiceTest {
 
     @DisplayName("게시물 삭제")
     @Test
-    @Transactional
     void deletePostById() {
         // given
         Member author = memberService.getMemberByEmail(testMember1Email);

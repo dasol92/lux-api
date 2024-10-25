@@ -6,12 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class MemberServiceTest {
 
     @Autowired
@@ -20,7 +21,6 @@ class MemberServiceTest {
     @DisplayName("멤버 등록 성공시")
     @Test
     @Transactional
-    @Rollback(value = false)
     void test() {
         // given
         Member member1 = Member.builder()
