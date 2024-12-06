@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_DIR" value="./logs/"></property>
+    <property name="FILE_NAME" value="lux-api"></property>
+
+    <!--  파일 로깅 설정 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${FILE_NAME}.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] %logger{36} - %msg%n</Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 매일 새로운 로그 파일 생성 및 압축 -->
+            <fileNamePattern>${LOG_DIR}/%d{yyyy-MM, aux}/${FILE_NAME}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+
+            <!-- 한 파일의 최대 사이즈 설정, 넘어가면 기존 파일은 %i을 붙여서 압축 -->
+            <maxFileSize>50MB</maxFileSize>
+
+            <!-- 보관할 로그 파일 모음의 최대 용량 설정, 이후에는 오래된 순으로 삭제 -->
+            <totalSizeCap>500MB</totalSizeCap>
+
+<!--            &lt;!&ndash; 보관할 로그 파일의 최대 개수 설정 (선택 사항) &ndash;&gt;-->
+<!--            <maxHistory>7</maxHistory>-->
+        </rollingPolicy>
+    </appender>
+
+    <!--  콘솔 로깅 설정 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!--################## 패키지별 설정 ################## -->
+<!--    <root level="debug">-->
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <logger name="com.toucan" level="debug" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+
+</configuration>
