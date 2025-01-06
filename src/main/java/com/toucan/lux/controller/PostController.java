@@ -4,6 +4,7 @@ import com.toucan.lux.domain.Member;
 import com.toucan.lux.domain.Post;
 import com.toucan.lux.dto.CreatePostReq;
 import com.toucan.lux.dto.PostDTO;
+import com.toucan.lux.jwt.JwtUtil;
 import com.toucan.lux.service.MemberService;
 import com.toucan.lux.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class PostController {
 
     private final PostService postService;
     private final MemberService memberService;
+    private final JwtUtil jwtUtil;
 
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllPosts(@RequestParam(defaultValue = "0") int page,
@@ -50,10 +52,15 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<PostDTO> createPost(@RequestBody CreatePostReq reqDto) {
-        Member member = memberService.getMemberByEmail("djkim@naver.com");
+    public ResponseEntity<PostDTO> createPost(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody CreatePostReq reqDto) {
+        String token = authorizationHeader.replace("Bearer ", "").trim();
+        String userEmail = jwtUtil.getUsername(token);
+        Member member = memberService.getMemberByEmail(userEmail);
+
         Post post = Post.builder()
-                .author(member) // FIXME
+                .author(member)
                 .title(reqDto.getTitle())
                 .content(reqDto.getContent())
                 .build();
